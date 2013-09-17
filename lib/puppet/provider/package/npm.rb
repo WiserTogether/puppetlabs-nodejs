@@ -5,7 +5,9 @@ Puppet::Type.type(:package).provide :npm, :parent => Puppet::Provider::Package d
 
   has_feature :versionable
 
-  optional_commands :npm => 'npm'
+  # hack /usr/local/bin onto the path since it magically disappears sometimes on darwin
+  ENV['PATH'] = ENV['PATH'] + ':/usr/local/bin'
+  has_command(:npm, "npm")
 
   def self.npmlist
     begin
